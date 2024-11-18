@@ -147,6 +147,8 @@ function initMenuColumn() {
         for (currEvent of events) {
           if (currEvent["className"] == currClassName) {
             currEvent["element"].style.display = "grid";
+            currEvent["element"].style.gridRow = "";
+            currEvent["element"].style.gridColumn = "";
           } else {
             currEvent["element"].style.display = "none";
           }
@@ -158,8 +160,11 @@ function initMenuColumn() {
       } else {
         for (currEvent of events) {
           currEvent["element"].style.display = "grid";
+          currEvent["element"].style.gridRow = "";
+          currEvent["element"].style.gridColumn = "";
         }
         classContainer.classList.remove("class-active");
+        triggerSort();
       }
     });
 
@@ -287,6 +292,7 @@ async function addEvent(eventName, className, day, month, year) {
 }
 
 function initSortMenu() {
+  sortEvents("date", false);
   const triggerMenu = () => {
     if (menuActive) {
       sortMenu.style.height = 0;
@@ -325,15 +331,68 @@ function initSortMenu() {
       currMenuItem.getElementsByClassName("sort-order")[0].style.transform =
         `rotate(${rotationDegrees}deg)`;
       sortOrder.style.transform = `rotate(${rotationDegrees}deg)`;
-
       sortMethod.innerHTML = newSortMethod;
 
       triggerMenu();
+      sortEvents(currMenuItem.id, menuItemsInfo[currMenuItem.id]);
     });
   }
 }
 
-closeForm();
+let sortMethod = "date";
+let sortAscending = false;
+function sortEvents(newSortMethod, ascending) {
+  sortMethod = newSortMethod;
+  sortAscending = ascending;
+  let sortedEvents = [];
+  if (newSortMethod == "date") {
+    let dateSortedEvents = [];
+    for (currEvent of events) {
+      const currentDate = new Date();
+      const targetDate = new Date(
+        currEvent.year,
+        currEvent.month - 1,
+        currEvent.day,
+      );
+      const timeDifference = targetDate - currentDate;
+      const currDateSortedEvent = {
+        timeDifference: timeDifference,
+        element: currEvent.element,
+      };
+      dateSortedEvents.push(currDateSortedEvent);
+    }
+    if (ascending) {
+      sortedEvents = dateSortedEvents.sort((a, b) => {
+        return b.timeDifference - a.timeDifference;
+      });
+    } else {
+      sortedEvents = dateSortedEvents.sort((a, b) => {
+        return a.timeDifference - b.timeDifference;
+      });
+    }
+  } else {
+    sortedEvents = events;
+  }
+
+  const maxCols = 4;
+  let currCol = 1;
+  let currRow = 1;
+  for (currEvent of sortedEvents) {
+    currEvent.element.style.gridRow = currRow;
+    currEvent.element.style.gridColumn = currCol;
+    currCol += 1;
+    if (currCol > maxCols) {
+      currCol = 1;
+      currRow += 1;
+    }
+  }
+}
+
+function triggerSort() {
+  sortEvents(sortMethod, sortAscending);
+}
+
 fetchEvents();
 initMenuColumn();
 initSortMenu();
+setTimeout(triggerSort, 10);
