@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Uni Timetable</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <link rel="stylesheet" type="text/css" href="style.css" />
+    </head>
+    <body>
+        <img id="logo" src="images/uc3m-logo.png" />
+        <header>
+            <h1 id="title">Prácticas</h1>
+        </header>
+        <div id="menu">
+            <h2>Clases</h2>
+        </div>
+        <div id="event-container">
+            <div id="event-adder"></div>
+        </div>
+        <div id="form-background">
+            <form>
+                <button id="form-close">&#x2715</button>
+                <h1>Nueva entrega/examen:</h1>
+                <div>
+                    <label for="eventName">Nombre del evento:</label>
+                    <input type="text" id="eventName" name="eventName" />
+                </div>
+                <div>
+                    <label for="className">Asignatura:</label>
+                    <select id="className" name="className">
+                        <option value="Análisis de Datos">
+                            Análisis de Datos
+                        </option>
+                        <option value="Arquitectura de Datos">
+                            Arquitectura de Datos
+                        </option>
+                        <option value="Ciberseguridad">Ciberseguridad</option>
+                        <option value="Dirección de Proyectos">
+                            Dirección de Proyectos
+                        </option>
+                        <option value="IAO">IAO</option>
+                        <option value="Presentaciones Eficaces">
+                            Presentaciones Eficaces
+                        </option>
+                    </select>
+                </div>
+                <div>
+                    <label for="fecha">Fecha:</label>
+                    <input type="date" id="date" />
+                </div>
+                <div id="form-submit-container">
+                    <input type="submit" value="Confirmar" id="form-submit" />
+                </div>
+            </form>
+        </div>
+        <script src="index.js"></script>
+    </body>
+</html>

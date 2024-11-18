@@ -1,0 +1,331 @@
+:root {
+    --black: #323232;
+    --green: #4d766e;
+    --blue: #688990;
+    --grey: #b6c2ce;
+    --white: #fafbfd;
+}
+
+img {
+    padding: 5px;
+}
+
+* {
+    box-sizing: border-box;
+    color: var(--black);
+}
+
+body {
+    width: 100dvw;
+    height: 100dvh;
+    padding: 0;
+    margin: 0;
+
+    overflow-x: hidden;
+
+    display: grid;
+    grid-template-columns: 15dvw 85dvw;
+    grid-template-rows: 10dvh 90dvh;
+}
+
+#logo {
+    grid-row: 1;
+    grid-column: 1;
+
+    background-color: var(--black);
+    width: 100%;
+    height: 100%;
+}
+
+header {
+    background-color: var(--black);
+    padding-left: 20px;
+
+    grid-column: 2;
+
+    display: grid;
+    grid-template-columns: max-content;
+    grid-template-rows: max-content;
+    justify-content: start;
+    align-content: end;
+
+    #title {
+        color: var(--white);
+        font-size: 25px;
+    }
+}
+
+#menu {
+    background-color: var(--black);
+
+    grid-column: 1;
+    grid-row: 2;
+
+    display: grid;
+    grid-template-columns: 100%;
+    justify-content: center;
+    align-content: start;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    h2 {
+        font-size: 25px;
+        color: var(--white);
+    }
+
+    .class {
+        display: grid;
+        grid-template-columns: 20% 80%;
+        align-content: center;
+        justify-content: center;
+        border-radius: 7px;
+        cursor: pointer;
+
+        .classMarker {
+            align-self: center;
+            justify-self: center;
+            height: 30%;
+            aspect-ratio: 1/1;
+            border-radius: 100%;
+            background-color: white;
+        }
+
+        .className {
+            color: white;
+        }
+    }
+
+    .class:hover {
+        background-color: var(--blue);
+    }
+
+    .class-active {
+        background-color: var(--blue) !important;
+    }
+
+    .class-active:hover {
+        background-color: var(--grey) !important;
+    }
+}
+
+#event-container {
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+
+    background-color: var(--green);
+
+    grid-row: 2;
+    grid-column: 2;
+
+    overflow-y: scroll;
+
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-flow: row;
+    gap: 20px;
+
+    #event-adder {
+        width: 100%;
+        height: 10dvh;
+        border: 2px solid rgb(68, 68, 68);
+        border-radius: 10px;
+        background-image: url("/images/plus-sign-button.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        cursor: pointer;
+    }
+
+    #event-adder:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .event {
+        border: 1px solid gray;
+        width: 100%;
+        height: 10dvh;
+        margin: 0;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        position: relative;
+
+        background-color: var(--white);
+
+        background-color: var(--grey);
+        border-radius: 10px;
+
+        display: grid;
+        grid-auto-flow: column;
+        grid-template-columns: 70% auto;
+        grid-template-rows: 60% 40%;
+
+        .event-name {
+            font-size: 20px;
+            text-align: start;
+            align-self: center;
+        }
+
+        .class {
+            display: grid;
+            grid-template-columns: min-content auto;
+            align-self: start;
+            align-items: center;
+
+            .class-marker {
+                aspect-ratio: 1/1;
+                height: 10px;
+                margin-right: 8px;
+                border-radius: 100%;
+                background-color: red;
+            }
+
+            .class-name {
+                font-size: 12px;
+            }
+        }
+
+        .event-timer {
+            width: 100%;
+            height: 100%;
+            background-color: yellow;
+            grid-column: 2;
+            grid-row: span 2;
+            border-radius: 10px;
+
+            display: grid;
+            grid-template-columns: 100%;
+            grid-template-rows: 100%;
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+            font-size: 20px;
+        }
+
+        .event-close {
+            cursor: pointer;
+
+            position: absolute;
+            left: 1px;
+            top: 0px;
+            margin: 0;
+
+            border: none;
+            background-color: transparent;
+            visibility: hidden;
+            opacity: 0.8;
+
+            font-size: 15px;
+        }
+    }
+
+    .event:hover {
+        border: 1px solid black;
+
+        .event-close {
+            visibility: visible;
+        }
+    }
+}
+
+#form-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100dvw;
+    height: 100dvh;
+    background-color: rgba(0, 0, 0, 0.8);
+
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 100%;
+    justify-items: center;
+    align-items: center;
+}
+
+form {
+    width: 30%;
+    height: 60%;
+    background-color: var(--grey);
+    border-radius: 15px;
+
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 30% min-content min-content min-content 30%;
+    justify-items: center;
+    align-items: start;
+
+    position: relative;
+
+    padding-top: 50px;
+    padding-bottom: 50px;
+
+    #form-close {
+        cursor: pointer;
+
+        position: absolute;
+        left: 5px;
+        top: 0px;
+        margin: 0;
+        opacity: 0.5;
+
+        border: none;
+        background-color: transparent;
+
+        font-size: 30px;
+    }
+
+    #form-close:hover {
+        opacity: 0.9;
+    }
+
+    h1 {
+        height: 100%;
+        align-self: start;
+        font-size: 25px;
+    }
+
+    div {
+        font-size: 15px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        width: 80%;
+        height: 40px;
+
+        display: grid;
+        grid-template-columns: 50% 50%;
+        grid-template-rows: 100%;
+        align-content: center;
+        justify-content: center;
+
+        input,
+        select {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    #form-submit-container {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-columns: 100%;
+        grid-template-rows: 100%;
+        justify-items: center;
+        align-items: center;
+    }
+
+    #form-submit {
+        font-size: 15px;
+        width: 30%;
+        height: 40px;
+        border-radius: 10px;
+        background-color: white;
+        border: none;
+        cursor: pointer;
+    }
+}
