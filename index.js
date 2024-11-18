@@ -6,7 +6,7 @@ let classColors = {
   Ciberseguridad: "brown",
   "Dirección de Proyectos": "yellow",
   IAO: "pink",
-  "Presentacion Eficaces": "blue",
+  "Presentaciones Eficaces": "blue",
 };
 
 function getClassColor(className) {
@@ -286,6 +286,54 @@ async function addEvent(eventName, className, day, month, year) {
   }
 }
 
+function initSortMenu() {
+  const triggerMenu = () => {
+    if (menuActive) {
+      sortMenu.style.height = 0;
+      sortMenu.style.visibility = "hidden";
+      sortMenuBackground.style.visibility = "hidden";
+    } else {
+      sortMenu.style.height = "min-content";
+      sortMenu.style.visibility = "visible";
+      sortMenuBackground.style.visibility = "visible";
+    }
+    menuActive = !menuActive;
+  };
+
+  const sortButton = document.getElementById("sort-button");
+  const sortMenu = document.getElementById("sort-menu");
+  const sortMenuBackground = document.getElementById("sort-menu-background");
+  let menuActive = false;
+  sortButton.addEventListener("click", triggerMenu);
+  sortMenuBackground.addEventListener("click", triggerMenu);
+
+  const menuItems = sortMenu.children;
+  const menuItemsInfo = new Object({});
+  const sortMethod = document.getElementById("sort-method");
+  const sortOrder = document.getElementById("sort-order");
+  for (const currMenuItem of menuItems) {
+    menuItemsInfo[currMenuItem.id] = false;
+
+    currMenuItem.addEventListener("click", () => {
+      const currSortMethod = sortMethod.innerHTML;
+      const newSortMethod =
+        currMenuItem.getElementsByClassName("sort-method")[0].innerHTML;
+      if (currSortMethod == newSortMethod) {
+        menuItemsInfo[currMenuItem.id] = !menuItemsInfo[currMenuItem.id];
+      }
+      const rotationDegrees = menuItemsInfo[currMenuItem.id] ? 180 : 0;
+      currMenuItem.getElementsByClassName("sort-order")[0].style.transform =
+        `rotate(${rotationDegrees}deg)`;
+      sortOrder.style.transform = `rotate(${rotationDegrees}deg)`;
+
+      sortMethod.innerHTML = newSortMethod;
+
+      triggerMenu();
+    });
+  }
+}
+
 closeForm();
 fetchEvents();
 initMenuColumn();
+initSortMenu();

@@ -40,19 +40,110 @@ body {
 header {
     background-color: var(--black);
     padding-left: 20px;
+    position: relative;
 
     grid-column: 2;
 
     display: grid;
-    grid-template-columns: max-content;
-    grid-template-rows: max-content;
-    justify-content: start;
-    align-content: end;
+    grid-template-columns: 80% 20%;
+    grid-template-rows: 100%;
 
     #title {
         color: var(--white);
         font-size: 25px;
     }
+
+    #sort-button {
+        height: 100%;
+        display: grid;
+        grid-template-columns: 80% min-content;
+        grid-template-rows: 100%;
+        align-items: center;
+        background-color: var(--blue);
+        padding: 10px;
+        cursor: pointer;
+        z-index: 2;
+
+        p {
+            color: var(--white);
+        }
+
+        span {
+            display: grid;
+            grid-template-columns: max-content auto;
+            grid-template-rows: 100%;
+        }
+
+        #sort-method {
+            padding-left: 10px;
+            padding-left: ;10px
+            justify-content: start;
+        }
+
+        #sort-order {
+            transition: transform 0.2s;
+        }
+    }
+
+    #sort-button:hover {
+        background-color: var(--grey);
+        p {
+            color: black;
+        }
+    }
+
+    #sort-menu {
+        visibility: hidden;
+        position: absolute;
+        width: calc(20% - 3px);
+        height: 0;
+        right: 0;
+        top: 100%;
+        transition: height 0.1s;
+        z-index: 2;
+
+        display: grid;
+        grid-template-columns: 100%;
+        grid-template-rows: repeat(15px, 4);
+
+        div {
+            background-color: var(--blue);
+            display: grid;
+            grid-template-rows: 100%;
+            grid-template-columns: auto min-content;
+
+            align-items: center;
+            padding-left: 20px;
+            padding-right: 20px;
+            cursor: pointer;
+            color: white;
+            p {
+                color: white;
+            }
+
+            .sort-order {
+                transition: transform 0.2s;
+            }
+        }
+
+        div:hover {
+            background-color: var(--grey);
+            color: black;
+             p {
+                 color: black;
+             }
+        }
+    }
+}
+
+#sort-menu-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100dvw;
+    height: 100dvh;
+    z-index: 1;
+    visibility: hidden;
 }
 
 #menu {
