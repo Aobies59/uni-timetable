@@ -18,6 +18,11 @@ document.getElementById("event-adder").addEventListener("click", () => {
 });
 
 let events = [];
+let eventInHand;
+let eventsNotInHand = [];
+let eventInHandPosition = [];
+let eventInHandInitialPosition = [];
+let eventNum = 0;
 function createEvent(eventName, className, day, month, year) {
   const event = {
     eventName: eventName,
@@ -100,11 +105,43 @@ function createEvent(eventName, className, day, month, year) {
   eventAdder.addEventListener("click", () => {
     openForm();
   });
+
+  eventElement.addEventListener("pointerdown", () => {
+    eventInHandPosition = [
+      eventElement.style.gridRow,
+      eventElement.style.gridColumn,
+    ];
+    eventInHandInitialPosition = [
+      eventElement.style.gridRow,
+      eventElement.style.gridColumn,
+    ];
+    const elementRect = eventElement.getBoundingClientRect();
+    const elementTop = elementRect.top + window.scrollY;
+    const elementLeft = elementRect.left + window.scrollX;
+
+    eventElement.style.position = "absolute";
+    eventElement.style.top = `${elementTop}px`;
+    eventElement.style.left = `${elementLeft}px`;
+
+    eventElement.style.width = "20dvw";
+    eventElement.style.height = "10dvh";
+
+    eventInHand = eventElement;
+
+    for (const currEvent of events) {
+      if (currEvent.element == eventElement) {
+        continue;
+      }
+
+      eventsNotInHand.push(currEvent.element);
+    }
+  });
   eventContainer.appendChild(eventElement);
   eventContainer.appendChild(eventAdder);
 
   event["element"] = eventElement;
   events.push(event);
+  eventNum += 1;
 }
 
 const menuColumn = document.getElementById("menu");
@@ -322,6 +359,7 @@ function initSortMenu() {
 
     currMenuItem.addEventListener("click", () => {
       const currSortMethod = sortMethod.innerHTML;
+      sortOrder.style.visibility = "visible";
       const newSortMethod =
         currMenuItem.getElementsByClassName("sort-method")[0].innerHTML;
       if (currSortMethod == newSortMethod) {
@@ -386,11 +424,100 @@ function sortEvents(newSortMethod, ascending) {
       currRow += 1;
     }
   }
+  document.getElementById("event-adder").style.gridRow = currRow;
+  document.getElementById("event-adder").style.gridColumn = currCol;
 }
 
 function triggerSort() {
   sortEvents(sortMethod, sortAscending);
 }
+
+let previousX = 0;
+let previousY = 0;
+document.addEventListener("mousemove", (event) => {
+  const movementX = event.x - previousX;
+  const movementY = event.y - previousY;
+  previousX = event.x;
+  previousY = event.y;
+
+  if (eventInHand == undefined) {
+    return;
+  }
+
+  const eventLeft = parseInt(eventInHand.style.left || 0, 10);
+  const eventTop = parseInt(eventInHand.style.top || 0, 10);
+  eventInHand.style.left = `${eventLeft + movementX}px`;
+  eventInHand.style.top = `${eventTop + movementY}px`;
+
+  for (const currEvent of eventsNotInHand) {
+    const currEventRect = currEvent.getBoundingClientRect();
+    const currEventTop = currEventRect.top + window.scrollY;
+    const currEventLeft = currEventRect.left + window.scrollX;
+
+    const currEventRow = parseInt(currEvent.style.gridRow || 0, 10);
+    const currEventCol = parseInt(currEvent.style.gridColumn || 0, 10);
+
+    const yAxisDiff = Math.abs(
+      parseInt(eventInHand.style.top || 0, 10) - currEventTop,
+    );
+    const xAxisDiff = Math.abs(
+      parseInt(eventInHand.style.left || 0, 10) - currEventLeft,
+    );
+    const maxDiff = 20;
+
+    if (yAxisDiff <= maxDiff) {
+      eventInHandPosition[0] = currEventRow;
+    }
+
+    if (xAxisDiff <= maxDiff) {
+      eventInHandPosition[1] = currEventCol;
+    }
+
+    if ((eventInHandPosition[0] - 1) * 4 + eventInHandPosition[1] > eventNum) {
+      eventInHandPosition[0] = Math.ceil(eventNum / 4);
+      eventInHandPosition[1] = eventNum % 4;
+    }
+  }
+});
+
+document.addEventListener("mouseup", () => {
+  if (eventInHand == undefined) {
+    return;
+  }
+
+  if (
+    eventInHandPosition[0] != eventInHandInitialPosition[0] ||
+    eventInHandPosition[1] != eventInHandInitialPosition[1]
+  ) {
+    for (const currEvent of eventsNotInHand) {
+      const currEventRow = parseInt(currEvent.style.gridRow || 0, 10);
+      const currEventCol = parseInt(currEvent.style.gridColumn || 0, 10);
+
+      if (
+        currEventRow == eventInHandPosition[0] &&
+        currEventCol == eventInHandPosition[1]
+      ) {
+        currEvent.style.gridRow = eventInHandInitialPosition[0];
+        currEvent.style.gridColumn = eventInHandInitialPosition[1];
+        break;
+      }
+    }
+
+    document.getElementById("sort-method").innerHTML = "Custom";
+    document.getElementById("sort-order").style.visibility = "hidden";
+  }
+
+  eventInHand.style.left = 0;
+  eventInHand.style.top = 0;
+  eventInHand.style.gridRow = eventInHandPosition[0];
+  eventInHand.style.gridColumn = eventInHandPosition[1];
+  eventInHand.style.position = "relative";
+
+  eventInHand = undefined;
+  eventInHandPosition = [];
+  eventInHandInitialPosition = [];
+  eventsNotInHand = [];
+});
 
 fetchEvents();
 initMenuColumn();
