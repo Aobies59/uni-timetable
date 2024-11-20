@@ -137,6 +137,9 @@ function createEvent(eventName, className, day, month, year) {
 
       eventsNotInHand.push(currEvent.element);
     }
+
+    eventAdder.style.gridRow = Math.ceil(eventNum / 4);
+    eventAdder.style.gridColumn = eventNum % 4;
   });
   eventContainer.appendChild(eventElement);
   eventContainer.appendChild(eventAdder);
