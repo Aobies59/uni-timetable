@@ -106,7 +106,9 @@ function createEvent(eventName, className, day, month, year) {
     openForm();
   });
 
-  eventElement.addEventListener("pointerdown", () => {
+  eventElement.addEventListener("mousedown", () => {
+    eventElement.style.zIndex = 10;
+    document.body.style.cursor = "grabbing";
     eventInHandPosition = [
       eventElement.style.gridRow,
       eventElement.style.gridColumn,
@@ -481,9 +483,15 @@ document.addEventListener("mousemove", (event) => {
 });
 
 document.addEventListener("mouseup", () => {
+  const eventAdder = document.getElementById("event-adder");
+  eventAdder.style.gridRow = "";
+  eventAdder.style.gridColumn = "";
   if (eventInHand == undefined) {
     return;
   }
+
+  eventInHand.style.zIndex = "";
+  document.body.style.cursor = "";
 
   if (
     eventInHandPosition[0] != eventInHandInitialPosition[0] ||
