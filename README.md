@@ -5,5 +5,5 @@ It uses port 8080, use localhost:8080 to see the website.
 
 ## To Do
 - [ ] Add ordering options
-- [ ] Add drag-and-drop
+- [x] Add drag-and-drop
 - [ ] Add a login system so it can be hosted openly
